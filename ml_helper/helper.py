@@ -29,7 +29,6 @@ def gen_planar_samples(
         phi = npr.uniform(0, 2 * np.pi)
         # amplitude
         amp = xylim[1] / nlg.norm(k)
-        # amp = 1
 
         funcs.append(partial(xsin, amp, k, phi))
 
@@ -77,13 +76,9 @@ def plot_decision_surface(fpred, xlim=(-5, 5), ylim=(-5, 5),
     if len(Z.shape) == 2 and Z.shape[1] == 2:
         Z = Z[:, 1]
 
-    # print(np.c_[XX.ravel(), XX.ravel()].shape)
-    # Z = np.apply_along_axis(fpred, 1, np.c_[XX.ravel(), XX.ravel()])
     Z = Z.reshape(XX.shape)
 
-    # f = plt.figure()
     if not ax:
-        # plt.figure()
         if with_true_surface:
             ax = plt.subplot(1, 2, 1)
             ax_true = plt.subplot(1, 2, 2)
@@ -107,12 +102,8 @@ def plot_decision_surface(fpred, xlim=(-5, 5), ylim=(-5, 5),
     ax.set_ylim(ylim)
     plt.tight_layout()
 
-    # return f
-
 
 def plot_red_blue(x, y, ax=None):
-    # f = plt.figure()
-
     if not ax:
         plt.figure()
         ax = plt.gca()
@@ -121,11 +112,3 @@ def plot_red_blue(x, y, ax=None):
     xblue = x[y == 1]
     ax.scatter(xred[:, 0], xred[:, 1], color='red', s=5)
     ax.scatter(xblue[:, 0], xblue[:, 1], color='blue', s=5)
-
-
-if __name__ == '__main__':
-    neg, pos, y, ampfun = gen_planar_samples()
-    plt.scatter(neg[:, 0], neg[:, 1], color='red')
-    plt.scatter(pos[:, 0], pos[:, 1], color='blue')
-    plot_decision_surface(ampfun)
-    plt.show()
