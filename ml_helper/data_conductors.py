@@ -1,12 +1,13 @@
 import os.path as osp
 from gzip import decompress
 from io import BytesIO
+from pathlib import Path
 
 import pandas as pd
 
 
 def _get_file_dir() -> str:
-    return osp.dirname(osp.realpath(__file__))
+    return str(Path(__file__).resolve().parent.joinpath('data'))
 
 
 def _clean_df(df: pd.DataFrame) -> pd.DataFrame:
