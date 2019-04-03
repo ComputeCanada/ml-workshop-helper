@@ -9,17 +9,30 @@ def _get_file_dir() -> str:
     return osp.dirname(osp.realpath(__file__))
 
 
-def load() -> pd.DataFrame:
-    with open(osp.join(_get_file_dir(), './conductors.csv.gz'), 'rb') as f:
+def _clean_df(df: pd.DataFrame) -> pd.DataFrame:
+
+    Y = df[['formation_energy_ev_natom', 'bandgap_energy_ev']]
+    X = df.drop(['formation_energy_ev_natom', 'bandgap_energy_ev'], axis=1)
+
+    return X, Y
+
+
+def _load(fn) -> pd.DataFrame:
+    with open(osp.join(_get_file_dir(), fn), 'rb') as f:
         gz_bytes = f.read()
 
     csv_file = BytesIO(decompress(gz_bytes))
     out = pd.read_csv(csv_file, index_col='id')
 
-    Y = out[['formation_energy_ev_natom', 'bandgap_energy_ev']]
-    X = out.drop(['formation_energy_ev_natom', 'bandgap_energy_ev'], axis=1)
+    return _clean_df(out)
 
-    return X, Y
+
+def load():
+    return _load('./conductors_train.csv.gz')
+
+
+def _load_test():
+    return _load('./conductors_test.csv.gz')
 
 
 def __test():
