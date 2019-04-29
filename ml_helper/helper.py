@@ -65,7 +65,10 @@ def plot_decision_surface(
         size=(14, 8),
         with_true_surface=None,
         binary=False,
-        cutoff=0.5
+        cutoff=0.5,
+        title=None,
+        xlabel=None,
+        ylabel=None,
 ):
 
     if ax and with_true_surface:
@@ -101,7 +104,17 @@ def plot_decision_surface(
         # set size only if we own the axes
         plt.gcf().set_size_inches(size)
 
-    ax.contourf(XX, YY, Z, cmap=plt.cm.RdYlBu, vmin=0, vmax=1)
+    ax.contourf(
+        XX,
+        YY,
+        Z,
+        cmap=plt.cm.RdYlBu,
+        vmin=0,
+        vmax=1,
+        title=title,
+        xlabel=xlabel,
+        ylabel=ylabel
+    )
 
     if with_data:
         x, y = with_data
