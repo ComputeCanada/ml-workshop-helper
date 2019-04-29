@@ -101,6 +101,10 @@ def plot_decision_surface(
         else:
             ax = plt.gca()
 
+        ax.set_title(title)
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
+
         # set size only if we own the axes
         plt.gcf().set_size_inches(size)
 
@@ -111,9 +115,6 @@ def plot_decision_surface(
         cmap=plt.cm.RdYlBu,
         vmin=0,
         vmax=1,
-        title=title,
-        xlabel=xlabel,
-        ylabel=ylabel
     )
 
     if with_data:
