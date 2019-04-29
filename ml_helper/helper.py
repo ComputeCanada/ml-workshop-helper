@@ -8,7 +8,8 @@ from scipy.special import expit
 
 
 def gen_planar_samples(
-        *, complexity=10, noisiness=0.33, num=256, xylim=(-5, 5), seed=None):
+        *, complexity=10, noisiness=0.33, num=256, xylim=(-5, 5), seed=None
+):
     '''
     Generates random 2D features and labels based on plane waves.
     '''
@@ -23,8 +24,8 @@ def gen_planar_samples(
     funcs = []
     for i in range(complexity):
         # wavevector, factor out scale
-        k = npr.uniform(i / 2, i + 1, size=(2,)) / xylim[1]
-        k *= (2 * (npr.random(size=(2,)) - 0.5))
+        k = npr.uniform(i / 2, i + 1, size=(2, )) / xylim[1]
+        k *= (2 * (npr.random(size=(2, )) - 0.5))
         # phase
         phi = npr.uniform(0, 2 * np.pi)
         # amplitude
@@ -55,9 +56,17 @@ def gen_planar_samples(
     return xys, y, amplitude
 
 
-def plot_decision_surface(fpred, xlim=(-5, 5), ylim=(-5, 5),
-                          ax=None, with_data=None, size=(14, 8),
-                          with_true_surface=None):
+def plot_decision_surface(
+        fpred,
+        xlim=(-5, 5),
+        ylim=(-5, 5),
+        ax=None,
+        with_data=None,
+        size=(14, 8),
+        with_true_surface=None,
+        binary=False,
+        cutoff=0.5
+):
 
     if ax and with_true_surface:
         raise ValueError('Cannot plot two surfaces with single passed axes!')
@@ -65,12 +74,16 @@ def plot_decision_surface(fpred, xlim=(-5, 5), ylim=(-5, 5),
     xmn, xmx = xlim
     ymn, ymx = ylim
 
-    XX, YY = np.meshgrid(np.arange(xmn, xmx, 0.05),
-                         np.arange(ymn, ymx, 0.05))
+    XX, YY = np.meshgrid(np.arange(xmn, xmx, 0.05), np.arange(ymn, ymx, 0.05))
 
     plt.tight_layout(h_pad=0.5, w_pad=0.5, pad=2.5)
 
     Z = fpred(np.c_[XX.ravel(), YY.ravel()])
+
+    if binary:
+        which = np.where(Z < cutoff)[0]
+        Z[:] = 1
+        Z[which] = 0
 
     # specialcase two classes, dirty but worx
     if len(Z.shape) == 2 and Z.shape[1] == 2:
@@ -95,8 +108,9 @@ def plot_decision_surface(fpred, xlim=(-5, 5), ylim=(-5, 5),
         plot_red_blue(x, y, ax=ax)
 
     if with_true_surface:
-        plot_decision_surface(with_true_surface,
-                              xlim=xlim, ylim=ylim, ax=ax_true)
+        plot_decision_surface(
+            with_true_surface, xlim=xlim, ylim=ylim, ax=ax_true
+        )
 
     ax.set_xlim(xlim)
     ax.set_ylim(ylim)
