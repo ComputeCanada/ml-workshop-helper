@@ -25,7 +25,8 @@ def _load(fn) -> pd.DataFrame:
     csv_file = BytesIO(decompress(gz_bytes))
     out = pd.read_csv(csv_file, index_col='id')
 
-    return _clean_df(out)
+    X, Y = _clean_df(out)
+    return X.columns, X.values, Y.values
 
 
 def load():
