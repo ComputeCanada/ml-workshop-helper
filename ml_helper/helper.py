@@ -7,15 +7,15 @@ import numpy.random as npr
 from scipy.special import expit
 
 
-def gen_example_samples(seed=1337):
+def gen_example_samples(seed=1337, N=30):
 
     npr.seed(seed)
-    N = 30
 
     X = npr.uniform(low=-5, high=5, size=N)
-    Y = 5 * X + 10 + 0.1 * X**2
+    Y = 5 * X + 10 - 0.5 * X**2
+    Y += npr.normal(0, 1, size=N)
 
-    noisy = npr.binomial(1, 0.05, size=N).astype(bool)
+    noisy = npr.binomial(1, 0.25, size=N).astype(bool)
     Y[noisy] = 0
 
     return X[:, None], Y
