@@ -7,6 +7,20 @@ import numpy.random as npr
 from scipy.special import expit
 
 
+def gen_example_samples(seed=1337):
+
+    npr.seed(seed)
+    N = 30
+
+    X = npr.uniform(low=-5, high=5, size=N)
+    Y = 5 * X + 10 + 0.1 * X**2
+
+    noisy = npr.binomial(1, 0.05, size=N).astype(bool)
+    Y[noisy] = 0
+
+    return X, Y
+
+
 def gen_planar_samples(
         *, complexity=10, noisiness=0.33, num=256, xylim=(-5, 5), seed=None
 ):
