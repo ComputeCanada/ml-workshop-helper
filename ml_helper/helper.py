@@ -18,7 +18,7 @@ def gen_example_samples(seed=1337):
     noisy = npr.binomial(1, 0.05, size=N).astype(bool)
     Y[noisy] = 0
 
-    return X, Y
+    return X[:, None], Y
 
 
 def gen_planar_samples(
