@@ -88,7 +88,7 @@ def plot_decision_surface(
     ylim=(-5, 5),
     ax=None,
     with_data=None,
-    size=(14, 8),
+    size=(6, 6),
     with_true_surface=None,
     binary=False,
     cutoff=0.5,
@@ -150,10 +150,19 @@ def plot_decision_surface(
     plt.tight_layout()
 
 
-def plot_red_blue(x, y, ax=None):
+def plot_red_blue(
+    x, y, ax=None, xlabel=None, ylabel=None, title=None, size=None
+):
     if not ax:
         plt.figure()
         ax = plt.gca()
+
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
+        ax.set_title(title)
+
+    if size is not None:
+        plt.gcf().set_size_inches(size)
 
     xred = x[y == 0]
     xblue = x[y == 1]
