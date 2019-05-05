@@ -25,7 +25,13 @@ def gen_example_samples(seed=1337, N=30):
 
 
 def gen_planar_samples(
-    *, complexity=10, noisiness=0.33, num=256, xylim=(-5, 5), seed=None
+    *,
+    complexity=10,
+    noisiness=0.33,
+    num=256,
+    xylim=(-5, 5),
+    seed=None,
+    deterministic=False,
 ):
     """
     Generates random 2D features and labels based on plane waves.
@@ -68,7 +74,10 @@ def gen_planar_samples(
     ythresh = noisiness * npr.random(size=xys.shape[:1])
 
     y = np.zeros(len(xys))
-    y[amp > 0.5 * (1 - noisiness) + ythresh] = 1
+    if not deterministic:
+        y[amp > 0.5 * (1 - noisiness) + ythresh] = 1
+    else:
+        y[amp > 0.5] = 1
 
     return xys, y, amplitude
 
