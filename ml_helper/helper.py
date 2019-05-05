@@ -110,7 +110,7 @@ def plot_decision_surface(
     Z = fpred(np.c_[XX.ravel(), YY.ravel()])
 
     if binary:
-        which = np.where(Z < cutoff)[0]
+        which = np.where(Z < cutoff)
         Z[:] = 1
         Z[which] = 0
 
@@ -168,3 +168,21 @@ def plot_red_blue(
     xblue = x[y == 1]
     ax.scatter(xred[:, 0], xred[:, 1], color="red", s=5)
     ax.scatter(xblue[:, 0], xblue[:, 1], color="blue", s=5)
+
+
+if __name__ == "__main__":
+    from sklearn.linear_model import LogisticRegression
+
+    x, y, amp = gen_planar_samples(seed=1341, deterministic=True)
+    model = LogisticRegression().fit(x, y)
+
+    plot_decision_surface(
+        model.predict_proba,
+        binary=True,
+        title="Learned Prediction: Cat [red] vs Dog [blue]",
+        xlabel="Ear Length",
+        ylabel="Fur Length",
+        size=(6, 6),
+    )
+
+    plt.show()
