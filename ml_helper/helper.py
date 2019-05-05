@@ -8,11 +8,14 @@ from scipy.special import expit
 
 
 def gen_example_samples(seed=1337, N=30):
+    """
+    Samples for the day 2 worked example problem.
+    """
 
     npr.seed(seed)
 
     X = npr.uniform(low=-5, high=5, size=N)
-    Y = 5 * X + 10 - 0.5 * X**2
+    Y = 5 * X + 10 - 0.5 * X ** 2
     Y += npr.normal(0, 1, size=N)
 
     noisy = npr.binomial(1, 0.25, size=N).astype(bool)
@@ -22,11 +25,11 @@ def gen_example_samples(seed=1337, N=30):
 
 
 def gen_planar_samples(
-        *, complexity=10, noisiness=0.33, num=256, xylim=(-5, 5), seed=None
+    *, complexity=10, noisiness=0.33, num=256, xylim=(-5, 5), seed=None
 ):
-    '''
+    """
     Generates random 2D features and labels based on plane waves.
-    '''
+    """
 
     if seed:
         npr.seed(seed)
@@ -38,8 +41,8 @@ def gen_planar_samples(
     funcs = []
     for i in range(complexity):
         # wavevector, factor out scale
-        k = npr.uniform(i / 2, i + 1, size=(2, )) / xylim[1]
-        k *= (2 * (npr.random(size=(2, )) - 0.5))
+        k = npr.uniform(i / 2, i + 1, size=(2,)) / xylim[1]
+        k *= 2 * (npr.random(size=(2,)) - 0.5)
         # phase
         phi = npr.uniform(0, 2 * np.pi)
         # amplitude
@@ -71,22 +74,22 @@ def gen_planar_samples(
 
 
 def plot_decision_surface(
-        fpred,
-        xlim=(-5, 5),
-        ylim=(-5, 5),
-        ax=None,
-        with_data=None,
-        size=(14, 8),
-        with_true_surface=None,
-        binary=False,
-        cutoff=0.5,
-        title=None,
-        xlabel=None,
-        ylabel=None,
+    fpred,
+    xlim=(-5, 5),
+    ylim=(-5, 5),
+    ax=None,
+    with_data=None,
+    size=(14, 8),
+    with_true_surface=None,
+    binary=False,
+    cutoff=0.5,
+    title=None,
+    xlabel=None,
+    ylabel=None,
 ):
 
     if ax and with_true_surface:
-        raise ValueError('Cannot plot two surfaces with single passed axes!')
+        raise ValueError("Cannot plot two surfaces with single passed axes!")
 
     xmn, xmx = xlim
     ymn, ymx = ylim
@@ -122,14 +125,7 @@ def plot_decision_surface(
         # set size only if we own the axes
         plt.gcf().set_size_inches(size)
 
-    ax.contourf(
-        XX,
-        YY,
-        Z,
-        cmap=plt.cm.RdYlBu,
-        vmin=0,
-        vmax=1,
-    )
+    ax.contourf(XX, YY, Z, cmap=plt.cm.RdYlBu, vmin=0, vmax=1)
 
     if with_data:
         x, y = with_data
@@ -152,5 +148,5 @@ def plot_red_blue(x, y, ax=None):
 
     xred = x[y == 0]
     xblue = x[y == 1]
-    ax.scatter(xred[:, 0], xred[:, 1], color='red', s=5)
-    ax.scatter(xblue[:, 0], xblue[:, 1], color='blue', s=5)
+    ax.scatter(xred[:, 0], xred[:, 1], color="red", s=5)
+    ax.scatter(xblue[:, 0], xblue[:, 1], color="blue", s=5)
